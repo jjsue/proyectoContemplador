@@ -19,7 +19,7 @@ conn.once('open', async () => {
 async function initUsersDb() {
   await usersDb.deleteMany();
   await usersDb.insertMany([
-    {userName: 'contemplador', email:'user@example.es', password: "1234"},
-    {userName: 'Bardichero', email:'userino@example.es', password: "12345"}
+    {userName: 'contemplador', email:'user@example.es', password: await usersDb.cifrado('1234')},
+    {userName: 'Bardichero', email:'userino@example.es', password: await usersDb.cifrado('1234567')}
   ]);
 }
