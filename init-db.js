@@ -1,9 +1,6 @@
 'use strict';
 
 const conn = require('./lib/connectDatabase');
-// const anuncio = require('./models/anuncio.js');
-// const tagDb = require('./models/tag.js');
-// const usersDb = require('./models/user.js');
 const usersDb = require('./models/user');
 
 conn.once('open', async () => {
