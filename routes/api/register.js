@@ -31,7 +31,7 @@ router.post('/',
                     res.status(403).json({ error: 'Username already exists' });
                 }
                 if (err.keyValue.email !== undefined) {
-                    res.status(403).json({ error: 'Email alryady exists' });
+                    res.status(403).json({ error: 'Email already exists' });
                 }
             } else {
                 next(err);
