@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "cross-env NODE_ENV=production node ./bin/www",
+    "dev": "cross-env PORT=3000 NODE_ENV=development nodemon",
+    "devbug": "cross-env PORT=3000 DEBUG=nodepop:* NODE_ENV=development nodemon"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
