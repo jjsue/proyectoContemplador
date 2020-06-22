@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var apiLogin = require('./routes/api/login');
 var apiRegister = require('./routes/api/register');
+var characterGenerator = require('./routes/api/characterGenerator')
 
 require('./lib/connectDatabase');
 
@@ -27,6 +28,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/login', apiLogin);
 app.use('/api/register', apiRegister);
+app.use('/api/charactergenerator', characterGenerator);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
