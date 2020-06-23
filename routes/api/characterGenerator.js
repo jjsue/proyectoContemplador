@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 const habilidades = require('./../../lib/tablas/skills');
 const clases = require('./../../lib/tablas/characterBase');
+const caracteristicasFn = require('./../../lib/operaciones/caracteristicas');
 const marcarClasea = require('./../../lib/operaciones/marcarClasea');
 router.post('/', async (req, res, next) => {
     try {
@@ -10,6 +11,7 @@ router.post('/', async (req, res, next) => {
         const clase = req.body.class;
         const nivel = parseInt(req.body.level);
         const raza = req.body.race;
+        const dices = req.body.dices;
         //Tomamos la tabla del nivel del personaje
         const characterTable = clases[clase][nivel];
         const characterVarios = clases[clase].varios;
@@ -18,8 +20,14 @@ router.post('/', async (req, res, next) => {
         createdCharacter.clase = clase.charAt(0).toUpperCase() + clase.slice(1);
         createdCharacter.nivel = nivel; //Añado nivel
         createdCharacter.raza = raza.charAt(0).toUpperCase() + raza.slice(1); //Añado raza con la primera en mayuscula
+        //Colocamos los puntos de caracteristica:
+        createdCharacter.caracteristicas = caracteristicasFn(characterVarios.caracteristicas.concat(characterVarios.caracteristicasMenosImp), dices);
         //Introducimos las habilidades y las marcamos como cláseas.
         createdCharacter.habilidades = marcarClasea(characterVarios.hc, habilidades);
+        //Ponemos los puntos a las habilidades. Será un sistema de 3 pools diferentes.
+
+        
+        
         res.json({ createdCharacter });
 
     }
