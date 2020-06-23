@@ -22,7 +22,7 @@ router.post('/', async (req, res, next) => {
         createdCharacter.nivel = nivel; //Añado nivel
         createdCharacter.raza = raza.charAt(0).toUpperCase() + raza.slice(1); //Añado raza con la primera en mayuscula
         //Colocamos los puntos de caracteristica:
-        createdCharacter.caracteristicas = caracteristicasFn(characterVarios.caracteristicas.concat(characterVarios.caracteristicasMenosImp), dices);
+        createdCharacter.caracteristicas = caracteristicasFn(characterVarios.caracteristicas.concat(characterVarios.caracteristicasMenosImp), dices, nivel);
         //Introducimos las habilidades y las marcamos como cláseas.
         createdCharacter.habilidades = marcarClasea(characterVarios.hc, habilidades);
         //Dos pools diferentes, uno con las habilidades de clase que tomaran la mayoria de los puntos y otro con las no claseas.
@@ -34,8 +34,6 @@ router.post('/', async (req, res, next) => {
 
     }
     catch (err) {
-        console.log(err);
-        return res.status(401).json({ errors: 'Alguno de los parametros no ha sido introducido de forma correcta' });
         next(err);
     }
 });
