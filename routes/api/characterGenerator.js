@@ -6,7 +6,7 @@ const clases = require('./../../lib/tablas/characterBase');
 const caracteristicasFn = require('./../../lib/operaciones/caracteristicas');
 const marcarClasea = require('./../../lib/operaciones/marcarClasea');
 const asignarRangos = require('./../../lib/operaciones/asignarRangos');
-const armas = require('./../../lib/tablas/armas');
+const equipamientoFn = require('./../../lib/operaciones/equipamiento');
 router.post('/', async (req, res, next) => {
     try {
         let createdCharacter = {};
@@ -27,9 +27,9 @@ router.post('/', async (req, res, next) => {
         //Introducimos las habilidades y las marcamos como cláseas.
         createdCharacter.habilidades = marcarClasea(characterVarios.hc, habilidades);
         //Dos pools diferentes, uno con las habilidades de clase que tomaran la mayoria de los puntos y otro con las no claseas.
-        asignarRangos(createdCharacter.caracteristicas.Int[1], characterVarios.ph, raza, nivel, createdCharacter.habilidades);
+        createdCharacter.habilidades = asignarRangos(createdCharacter.caracteristicas.Int[1], characterVarios.ph, raza, nivel, createdCharacter.habilidades);
         //Ahora debería ir con el equipamiento
-        
+        createdCharacter.equipo = equipamientoFn(characterVarios.posiblesArmas);
 
         res.json({ createdCharacter });
 
