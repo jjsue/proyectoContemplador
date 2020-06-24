@@ -29,7 +29,7 @@ router.post('/', async (req, res, next) => {
         //Dos pools diferentes, uno con las habilidades de clase que tomaran la mayoria de los puntos y otro con las no claseas.
         createdCharacter.habilidades = asignarRangos(createdCharacter.caracteristicas.Int[1], characterVarios.ph, raza, nivel, createdCharacter.habilidades);
         //Ahora debería ir con el equipamiento
-        createdCharacter.equipo = equipamientoFn(characterVarios.posiblesArmas);
+        createdCharacter.equipo = equipamientoFn(characterVarios.posiblesArmas, characterVarios.posiblesArmaduras);
 
         res.json({ createdCharacter });
 
