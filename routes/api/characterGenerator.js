@@ -34,7 +34,7 @@ router.post('/', async (req, res, next) => {
         //Ahora debería ir con el equipamiento
         createdCharacter.equipo = equipamientoFn(characterVarios.posiblesArmas, characterVarios.posiblesArmaduras);
         // Ahora ya todos los atributos derivados, ataques, etc.
-        derivadasFn(createdCharacter, characterTable, razaT);
+        createdCharacter = derivadasFn(createdCharacter, characterTable, razaT);
         res.json({ createdCharacter });
 
     }
