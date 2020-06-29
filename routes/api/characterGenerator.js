@@ -30,7 +30,7 @@ router.post('/', async (req, res, next) => {
         //Introducimos las habilidades y las marcamos como cláseas.
         createdCharacter.habilidades = marcarClasea(characterVarios.hc, habilidades);
         //Dos pools diferentes, uno con las habilidades de clase que tomaran la mayoria de los puntos y otro con las no claseas.
-        createdCharacter.habilidades = asignarRangos(createdCharacter.caracteristicas.Int[1], characterVarios.ph, raza, nivel, createdCharacter.habilidades);
+        createdCharacter.habilidades = asignarRangos(createdCharacter.caracteristicas.Int[1], characterVarios.ph, raza, nivel, createdCharacter.habilidades, createdCharacter.caracteristicas);
         //Ahora debería ir con el equipamiento
         createdCharacter.equipo = equipamientoFn(characterVarios.posiblesArmas, characterVarios.posiblesArmaduras);
         // Ahora ya todos los atributos derivados, ataques, etc.
