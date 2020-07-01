@@ -9,6 +9,7 @@ const marcarClasea = require('./../../lib/operaciones/marcarClasea');
 const asignarRangos = require('./../../lib/operaciones/asignarRangos');
 const equipamientoFn = require('./../../lib/operaciones/equipamiento');
 const derivadasFn = require('./../../lib/operaciones/derivadas');
+const pgFn = require('../../lib/operaciones/pg');
 router.post('/', async (req, res, next) => {
     try {
         let createdCharacter = {};
@@ -25,16 +26,26 @@ router.post('/', async (req, res, next) => {
         createdCharacter.clase = clase.charAt(0).toUpperCase() + clase.slice(1);
         createdCharacter.nivel = nivel; //Añado nivel
         createdCharacter.raza = raza.charAt(0).toUpperCase() + raza.slice(1); //Añado raza con la primera en mayuscula
+
         //Colocamos los puntos de caracteristica:
         createdCharacter.caracteristicas = caracteristicasFn(characterVarios.caracteristicas.concat(characterVarios.caracteristicasMenosImp), dices, nivel, razaT);
+
         //Introducimos las habilidades y las marcamos como cláseas.
         createdCharacter.habilidades = marcarClasea(characterVarios.hc, habilidades);
+
         //Dos pools diferentes, uno con las habilidades de clase que tomaran la mayoria de los puntos y otro con las no claseas.
         createdCharacter.habilidades = asignarRangos(createdCharacter.caracteristicas.Int[1], characterVarios.ph, raza, nivel, createdCharacter.habilidades, createdCharacter.caracteristicas);
+
         //Ahora debería ir con el equipamiento
         createdCharacter.equipo = equipamientoFn(characterVarios.posiblesArmas, characterVarios.posiblesArmaduras, characterVarios.posiblesEscudos);
+
         // Ahora ya todos los atributos derivados, ataques, etc.
         createdCharacter = derivadasFn(createdCharacter, characterTable, razaT);
+
+        //Toca algo tan sencillo como los puntos de golpe
+        createdCharacter.pg = pgFn(nivel, characterVarios.dg, createdCharacter.caracteristicas.Con[1]);
+
+        //Respuesta
         res.json({ createdCharacter });
 
     }
