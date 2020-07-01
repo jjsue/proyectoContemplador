@@ -10,7 +10,8 @@ const asignarRangos = require('./../../lib/operaciones/asignarRangos');
 const equipamientoFn = require('./../../lib/operaciones/equipamiento');
 const derivadasFn = require('./../../lib/operaciones/derivadas');
 const pgFn = require('../../lib/operaciones/pg');
-const alineamientoFn = require('../../lib/operaciones/alineamiento')
+const alineamientoFn = require('../../lib/operaciones/alineamiento');
+const conjurosDiariosFn = require('./../../lib/operaciones/conjurosDiarios');
 router.post('/', async (req, res, next) => {
     try {
         let createdCharacter = {};
@@ -49,11 +50,15 @@ router.post('/', async (req, res, next) => {
         //Alineamiento
         createdCharacter.alineamiento = alineamientoFn(characterVarios.alineamiento);
 
+        //Conjuros
+        createdCharacter.conjuros = 'caracteristicaConjuros' in characterVarios ? conjurosDiariosFn(createdCharacter.caracteristicas[characterVarios.caracteristicaConjuros][0], characterTable.conjuros) : null;
+
         //Respuesta
         res.json({ createdCharacter });
 
     }
     catch (err) {
+        console.log(err);
         next(err);
     }
 });
