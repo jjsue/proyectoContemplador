@@ -28,6 +28,7 @@ router.post('/', async (req, res, next) => {
         createdCharacter.clase = clase.charAt(0).toUpperCase() + clase.slice(1);
         createdCharacter.nivel = nivel; //Añado nivel
         createdCharacter.raza = raza.charAt(0).toUpperCase() + raza.slice(1); //Añado raza con la primera en mayuscula
+        createdCharacter.especial = characterTable.especial;
 
         //Colocamos los puntos de caracteristica:
         createdCharacter.caracteristicas = caracteristicasFn(characterVarios.caracteristicas.concat(characterVarios.caracteristicasMenosImp), dices, nivel, razaT);
