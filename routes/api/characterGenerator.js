@@ -10,6 +10,7 @@ const asignarRangos = require('./../../lib/operaciones/asignarRangos');
 const equipamientoFn = require('./../../lib/operaciones/equipamiento');
 const derivadasFn = require('./../../lib/operaciones/derivadas');
 const pgFn = require('../../lib/operaciones/pg');
+const alineamientoFn = require('../../lib/operaciones/alineamiento')
 router.post('/', async (req, res, next) => {
     try {
         let createdCharacter = {};
@@ -44,6 +45,9 @@ router.post('/', async (req, res, next) => {
 
         //Toca algo tan sencillo como los puntos de golpe
         createdCharacter.pg = pgFn(nivel, characterVarios.dg, createdCharacter.caracteristicas.Con[1]);
+
+        //Alineamiento
+        createdCharacter.alineamiento = alineamientoFn(characterVarios.alineamiento);
 
         //Respuesta
         res.json({ createdCharacter });
