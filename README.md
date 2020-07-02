@@ -608,7 +608,7 @@ En el caso de la petición anterior recibiremos una respuesta tal que así, voy 
         "ca": [ // Armadura en el mismo orden que en la ficha de personaje.
             17, // Total
             9, // Toque
-            17 // Desprevenido
+            18 // Desprevenido
         ],
         "velocidad": 20, //Velocidad terrestre con armadura puesta
         "pg": 112, // Puntos de golpe
