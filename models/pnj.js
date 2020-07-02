@@ -17,7 +17,10 @@ const pnjSchema = mongoose.Schema({
     velocidad: Number,
     pg: Number,
     alineamiento: String,
-    conjuros: Array
+    conjuros: Array,
+    creatorId: { type: String, index: true },
+    isPublic: { type: Boolean, default: false },
+    creationDate: {type: Date}
 });
 
 pnjSchema.statics.lista = function (filter, sort, skip, limit, fields) {
