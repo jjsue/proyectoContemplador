@@ -5,11 +5,13 @@ const Pnj = require('./../../models/pnj');
 router.get('/', async (req, res, next) => {
     try {
         const filtro = {};
-        var sort = '_id';
+        console.log(req.query.sort);
+        let orderBy = req.query.sort === 'old' ? 1 : -1 //Ordenar por mas reciente o mas antiguo, por defecto ordena por reciente
+        var sort = {creationDate: orderBy};
         var skip = 0;
         var limit = 100;
-        const fields = 'name clase nivel raza';
-        filtro.isPublic = true; //Nos aseguramos que los personajes que listamos son los publicos.
+        const fields = 'name clase nivel raza, creationDate';
+        //filtro.isPublic = true; //Nos aseguramos que los personajes que listamos son los publicos.
         if (req.query.name !== undefined) {
             filtro.name = new RegExp(req.query.name, "gi");
         }

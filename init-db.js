@@ -38,7 +38,7 @@ async function initUsersDb() {
 }
 
 async function initPnjDb() {
-  await pnjDb.deleteMany();
+  //await pnjDb.deleteMany();
   await pnjDb.insertMany([
     {
       name: chance.name(),
@@ -609,6 +609,7 @@ async function initPnjDb() {
       conjuros: [6, 6, 6, 6, 6, 5, 4, 4, 4, 4],
       isPublic: true,
       creatorId: chance.wp8_anid2(),
+      creationDate: new Date(),
     },
     {
       name: chance.name(),
@@ -1179,6 +1180,7 @@ async function initPnjDb() {
       conjuros: [6, 6, 6, 6, 6, 5, 4, 4, 4, 4],
       isPublic: false,
       creatorId: chance.wp8_anid2(),
+      creationDate: new Date(),
     },
     {
       name: chance.name(),
@@ -1749,6 +1751,7 @@ async function initPnjDb() {
       conjuros: [6, 6, 6, 6, 6, 5, 4, 4, 4, 4],
       isPublic: true,
       creatorId: chance.wp8_anid2(),
+      creationDate: new Date(),
     },
     {
       name: chance.name(),
@@ -2319,6 +2322,7 @@ async function initPnjDb() {
       conjuros: [6, 6, 6, 6, 6, 5, 4, 4, 4, 4],
       isPublic: false,
       creatorId: chance.wp8_anid2(),
+      creationDate: new Date(),
     },
   ]);
   
