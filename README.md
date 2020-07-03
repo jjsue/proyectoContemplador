@@ -2,6 +2,85 @@
 
 ## API
 
+### Login
+
+Endpoint */login*
+
+Peticion post a la que tenemos que añadir dos campos.
+
+- **email**
+- **password**
+
+Si es erroneo alguno de los campos introducidos la respuesta será un 401 con este contenido:
+
+```
+{
+    "errors": "Username or password wrong"
+}
+```
+
+Si todo va correctamente la respuesta será:
+
+```
+"authToken": "Hola, soy un token JWT"
+```
+
+A la vez que se devuelve este token JWT se escribe una cookie en el navegador cuyo nombre es "authToken".
+
+A la hora de usar los puntos securizados de la API podremos logarnos bien con la cookie o bien con el token recibido.
+
+### Registro
+
+Endpoint */register*
+
+Tenemos tres parametros aquí.
+
+- **userName**
+- **email**
+- **password**
+
+Tenemos varios tipos de respuestas posibles:
+
+El nombre de usuario ya existe en la base de datos (403):
+
+```
+{
+    "error": "Username already exists"
+}
+```
+
+El email ya existe en la base de datos (403):
+
+```
+{
+    "error": "Email already exists"
+}
+```
+
+Error semantico en el campo email (422):
+
+```
+{
+    "errors": [
+        {
+            "value": "example",
+            "msg": "Invalid value",
+            "param": "email",
+            "location": "body"
+        }
+    ]
+}
+```
+
+Creado correctamente (201):
+
+```
+{
+    "result": "user created"
+}
+```
+
+
 ### Generador de personajes
 
 Tenemos que enviar 4 parametros en el body de una petición POST. Estos cuatro parametros son:
@@ -633,3 +712,65 @@ En el caso de la petición anterior recibiremos una respuesta tal que así, voy 
 </details>
 
 Como podemos ver en la petición se manejan muchos datos pero está organizado de tal forma que podamos usar en el front los que mas nos convenga en cada momento de forma sencilla.
+
+### Listado público de personajes
+
+**Endpoint:**
+
+```
+/api/character
+```
+
+Es una petición de tipo **GET** en la que podremos usar varios párametros (query params) para obtener datos:
+- **sort**: *recent* | *old*
+- **name**: *nombre del personaje*
+- **race**: *raza del personaje*
+- **class**: *clase del personaje*
+- **levelMax**: *nivel maximo que queremos que tenga el personaje*
+- **levelMin**: *nivel minimo que queremos que tenga el personaje*
+- **limit**: *limite de resultados (paginacion)*
+- **skip**: *saltarse resultados (paginación)*
+
+**Ejemplo de respuesta:**
+
+Query string: *?sort=recent&name=L&race=semi&class=clerigo&limit=5*
+
+```
+[
+    {
+        "_id": "5eff0eac7223a42e046b10cb",
+        "name": "Sallie Saunders",
+        "clase": "Clerigo",
+        "nivel": 20,
+        "raza": "Semiorco"
+    },
+    {
+        "_id": "5eff0ce62eeb3b3e60db2fe6",
+        "name": "Robert Salazar",
+        "clase": "Clerigo",
+        "nivel": 20,
+        "raza": "Semiorco"
+    },
+    {
+        "_id": "5eff0ce62eeb3b3e60db2fe4",
+        "name": "Dale Wheeler",
+        "clase": "Clerigo",
+        "nivel": 20,
+        "raza": "Semiorco"
+    },
+    {
+        "_id": "5eff0ce49f2b0b20e4c7d7d9",
+        "name": "Etta Welch",
+        "clase": "Clerigo",
+        "nivel": 20,
+        "raza": "Semiorco"
+    },
+    {
+        "_id": "5eff0ac7a2a3ea1398d7d3df",
+        "name": "Ollie Walsh",
+        "clase": "Clerigo",
+        "nivel": 20,
+        "raza": "Semiorco"
+    }
+]
+```

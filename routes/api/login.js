@@ -14,9 +14,14 @@ router.post('/', async (req, res, next) => {
             return res.status(401).json({ errors: 'Username or password wrong' });
         } else {
             const tokenCreated = jwt.sign({ _id: userFound._id }, process.env.JWT_PASS, {
-                expiresIn: '2d',
+                expiresIn: '15d',
             });
-            res.json({ token: tokenCreated });
+            res.cookie('authToken', tokenCreated, {
+                maxAge: 1000 * 60 * 60 * 60 * 24 * 15,
+                httpsOnly: true,
+                //secure: true,
+            });
+            res.json({ authToken: tokenCreated });
         }
     }
     catch (err) {
