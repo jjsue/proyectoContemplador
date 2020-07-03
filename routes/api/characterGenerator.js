@@ -16,8 +16,17 @@ router.post('/', async (req, res, next) => {
     try {
         let createdCharacter = {};
         const clase = req.body.class;
+        if (!(clase in clases)) {
+            return res.status(400).json({error: 'Esa clase no la tenemos'});
+        }
         const nivel = parseInt(req.body.level);
+        if (nivel > 20 || nivel < 1 || isNaN(nivel) ) { //Comprobacion de nivel
+            return res.status(400).json({ error: 'Has introducido mal el rango de nivel' });
+        }
         const raza = req.body.race;
+        if (!(raza in tablaRazas)) {
+            return res.status(400).json({ error: 'La raza elegida no es una de las posibles actualmente' });
+        }
         const razaT = tablaRazas[raza];
         const dices = req.body.dices;
         //Tomamos la tabla del nivel del personaje
