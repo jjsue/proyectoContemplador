@@ -15,7 +15,6 @@ const conjurosDiariosFn = require('./../../lib/operaciones/conjurosDiarios');
 router.post('/', async (req, res, next) => {
     try {
         let createdCharacter = {};
-        console.log(createdCharacter);
         const clase = req.body.class;
         if (!(clase in clases)) {
             return res.status(400).json({error: 'Esa clase no la tenemos'});
