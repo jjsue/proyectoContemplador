@@ -15,6 +15,7 @@ const conjurosDiariosFn = require('./../../lib/operaciones/conjurosDiarios');
 router.post('/', async (req, res, next) => {
     try {
         let createdCharacter = {};
+        console.log(createdCharacter);
         const clase = req.body.class;
         if (!(clase in clases)) {
             return res.status(400).json({error: 'Esa clase no la tenemos'});
@@ -38,12 +39,13 @@ router.post('/', async (req, res, next) => {
         createdCharacter.nivel = nivel; //Añado nivel
         createdCharacter.raza = raza.charAt(0).toUpperCase() + raza.slice(1); //Añado raza con la primera en mayuscula
         createdCharacter.especial = characterTable.especial;
+        createdCharacter.tam = tablaRazas[raza][1]; //Tamaño
 
         //Colocamos los puntos de caracteristica:
         createdCharacter.caracteristicas = caracteristicasFn(characterVarios.caracteristicas.concat(characterVarios.caracteristicasMenosImp), dices, nivel, razaT);
 
         //Introducimos las habilidades y las marcamos como cláseas.
-        createdCharacter.habilidades = marcarClasea(characterVarios.hc, habilidades);
+        createdCharacter.habilidades = marcarClasea(characterVarios.hc, JSON.parse(JSON.stringify(habilidades)));
 
         //Dos pools diferentes, uno con las habilidades de clase que tomaran la mayoria de los puntos y otro con las no claseas.
         createdCharacter.habilidades = asignarRangos(createdCharacter.caracteristicas.Int[1], characterVarios.ph, raza, nivel, createdCharacter.habilidades, createdCharacter.caracteristicas);
