@@ -18,6 +18,8 @@ const pnjSchema = mongoose.Schema({
     pg: Number,
     alineamiento: String,
     conjuros: Array,
+    tam: String,
+    salvaciones: Object,
     creatorId: { type: String, index: true },
     isPublic: { type: Boolean, default: false },
     creationDate: {type: Date}
