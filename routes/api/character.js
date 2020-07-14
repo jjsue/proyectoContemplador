@@ -3,6 +3,8 @@ var express = require('express');
 var router = express.Router();
 const jwt = require('jsonwebtoken');
 const Pnj = require('./../../models/pnj');
+const User = require('./../../models/user');
+const { query } = require('express');
 router.get('/', async (req, res, next) => {
     try {
         const filtro = {};
@@ -45,29 +47,49 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
     try {
-        const pnjId = req.body.id;
-        const pnjFound = await Pnj.findById(pnjId, (err, pnj) => {
-            if (err) {
-                return next(err);
-            }
-        });
-        if (pnjFound.isPublic) {
-            var toReturn = JSON.parse(JSON.stringify(pnjFound));
-            delete toReturn.creatorId;
-            delete toReturn.isPublic;
-            res.send(toReturn);
-        } else if (req.cookies.authToken !== undefined) {
-            let userId = jwt.verify(req.cookies.authToken, process.env.JWT_PASS);
-            if (userId._id === pnjFound.creatorId) {
+        if (req.body.id !== undefined) { //Si enviamos un id de personaje devolvemos un solo personaje
+            const pnjId = req.body.id;
+            const pnjFound = await Pnj.findById(pnjId, (err, pnj) => {
+                if (err) {
+                    return next(err);
+                }
+            });
+            if (pnjFound.isPublic) {
                 var toReturn = JSON.parse(JSON.stringify(pnjFound));
                 delete toReturn.creatorId;
                 delete toReturn.isPublic;
                 res.send(toReturn);
-            }else{
+            } else if (req.cookies.authToken !== undefined) {
+                let userId = jwt.verify(req.cookies.authToken, process.env.JWT_PASS);
+                if (userId._id === pnjFound.creatorId) {
+                    var toReturn = JSON.parse(JSON.stringify(pnjFound));
+                    delete toReturn.creatorId;
+                    delete toReturn.isPublic;
+                    res.send(toReturn);
+                } else {
+                    res.status(401).json({ result: "No tienes permiso para ver este personaje" });
+                }
+            } else {
                 res.status(401).json({ result: "No tienes permiso para ver este personaje" });
             }
+        } else if (req.cookies.authToken !== undefined) { //Si no enviamos id especifico nos devuelve una lista de nuestros propios personajes
+            let userId = jwt.verify(req.cookies.authToken, process.env.JWT_PASS);
+            const filtro = {};
+            let orderBy = - 1
+            var sort = { creationDate: orderBy };
+            var skip = 0;
+            var limit = 1000;
+            const fields = 'name clase nivel raza';
+            filtro.creatorId = userId._id;
+            const listOfOwn = await Pnj.lista(filtro, sort, skip, limit, fields);
+            const userName = await User.findById(userId._id);
+            const response = {
+                characterArray: listOfOwn,
+                user: userName.userName,
+            }
+            res.send(response);
         } else {
-            res.status(401).json({ result: "No tienes permiso para ver este personaje" });
+            res.status(401).json({ result: "No tienes permiso para ver esto" });
         }
     }
     catch (err) {
