@@ -1,6 +1,7 @@
 'use strict'
 var express = require('express');
 var router = express.Router();
+const jwt = require('jsonwebtoken');
 const Pnj = require('./../../models/pnj');
 router.get('/', async (req, res, next) => {
     try {
@@ -36,6 +37,38 @@ router.get('/', async (req, res, next) => {
         const response = await Pnj.lista(filtro, sort, skip, limit, fields);
         const docs = response;
         res.json(docs);
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+router.post('/', async (req, res, next) => {
+    try {
+        const pnjId = req.body.id;
+        const pnjFound = await Pnj.findById(pnjId, (err, pnj) => {
+            if (err) {
+                return next(err);
+            }
+        });
+        if (pnjFound.isPublic) {
+            var toReturn = JSON.parse(JSON.stringify(pnjFound));
+            delete toReturn.creatorId;
+            delete toReturn.isPublic;
+            res.send(toReturn);
+        } else if (req.cookies.authToken !== undefined) {
+            let userId = jwt.verify(req.cookies.authToken, process.env.JWT_PASS);
+            if (userId._id === pnjFound.creatorId) {
+                var toReturn = JSON.parse(JSON.stringify(pnjFound));
+                delete toReturn.creatorId;
+                delete toReturn.isPublic;
+                res.send(toReturn);
+            }else{
+                res.status(401).json({ result: "No tienes permiso para ver este personaje" });
+            }
+        } else {
+            res.status(401).json({ result: "No tienes permiso para ver este personaje" });
+        }
     }
     catch (err) {
         next(err);

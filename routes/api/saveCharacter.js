@@ -116,7 +116,7 @@ function checkEquipo(equipo) {
 
 router.post('/', [
     check('authToken').isJWT(),
-    check('name').isString().isLength({ max: 32 }),
+    check('name').isString().isLength({ max: 32, min: 3 }),
     check('clase').isString().custom((value) => {
         if (checkContainsOneClass(value)) {
             return true;
@@ -194,7 +194,7 @@ router.post('/', [
         } else {
             let userId = jwt.verify(req.cookies.authToken, process.env.JWT_PASS);
             const dataToSave = req.body;
-            dataToSave.cretorId = userId._id;
+            dataToSave.creatorId = userId._id;
             dataToSave.isPublic = false;
             dataToSave.creationDate = new Date();
             const pnjToSave = new Pnj(dataToSave);
