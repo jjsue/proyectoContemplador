@@ -22,7 +22,7 @@ const pnjSchema = mongoose.Schema({
     salvaciones: Object,
     creatorId: { type: String, index: true },
     isPublic: { type: Boolean, default: false },
-    creationDate: {type: Date}
+    creationDate: { type: Date }
 });
 
 pnjSchema.statics.lista = function (filter, sort, skip, limit, fields) {

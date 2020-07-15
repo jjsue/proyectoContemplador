@@ -11,6 +11,7 @@ var apiRegister = require('./routes/api/register');
 var characterGenerator = require('./routes/api/characterGenerator');
 var character = require('./routes/api/character');
 var saveCharacter = require('./routes/api/saveCharacter');
+var makePublic = require('./routes/api/makepublic');
 
 require('./lib/connectDatabase');
 
@@ -38,6 +39,7 @@ app.use('/api/register', apiRegister);
 app.use('/api/charactergenerator', characterGenerator);
 app.use('/api/character', character);
 app.use('/api/savecharacter', saveCharacter);
+app.use('/api/makepublic', makePublic);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
