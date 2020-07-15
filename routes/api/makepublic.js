@@ -36,15 +36,37 @@ router.put('/', async (req, res, next) => {
             const characterFound = await Pnj.findById(characterId);
             if (characterFound.creatorId === userId._id) {
                 if (toChange === 'no') {
-                    const updateProcess = await Pnj.findOneAndUpdate({_id: characterId}, {isPublic: false});
-                    res.status(201).json({result: "Personaje privado"});
+                    const updateProcess = await Pnj.findOneAndUpdate({ _id: characterId }, { isPublic: false });
+                    res.status(201).json({ result: "Personaje privado" });
                 }
                 else if (toChange === 'yes') {
-                    const updateProcess = await Pnj.findOneAndUpdate({_id: characterId}, {isPublic: true});
-                    res.status(201).json({result: "Personaje publico"});
+                    const updateProcess = await Pnj.findOneAndUpdate({ _id: characterId }, { isPublic: true });
+                    res.status(201).json({ result: "Personaje publico" });
                 } else {
-                    res.status(400).json({result: "Ni lo uno ni lo otro"});
+                    res.status(400).json({ result: "Ni lo uno ni lo otro" });
                 }
+            } else {
+                res.status(401).json({ result: "No autorizado" });
+            }
+        } else {
+            res.status(500).json({ result: "Algo ha fallado" });
+        }
+    }
+    catch (err) {
+        next(err);
+    }
+});
+router.delete('/', async (req, res, next) => {
+    try {
+
+        let userId = jwt.verify(req.cookies.authToken, process.env.JWT_PASS);
+        let characterId = req.body.character;
+        if (characterId !== undefined) {
+            //Ahora a buscar en la base de datos.
+            const characterFound = await Pnj.findById(characterId);
+            if (characterFound.creatorId === userId._id) {
+                const deletionResult = await Pnj.deleteOne({ _id: characterId });
+                res.status(204).send("ok");
             } else {
                 res.status(401).json({ result: "No autorizado" });
             }

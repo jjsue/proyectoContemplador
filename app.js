@@ -20,7 +20,7 @@ var app = express();
 //CORS:
 app.use(cors({
   credentials: true,
-  origin: 'http://213.194.128.57:3001',
+  origin: 'http://localhost:3001',
 }));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
