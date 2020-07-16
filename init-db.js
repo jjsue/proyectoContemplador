@@ -27,12 +27,18 @@ async function initUsersDb() {
     {
       userName: 'contemplador',
       email: 'user@example.es',
-      password: await usersDb.cifrado('1234')
+      password: await usersDb.cifrado('1234'),
+      codeUsed: true,
+      codeDate: null,
+      registerDate: new Date(),
     },
     {
       userName: 'Bardichero',
       email: 'userino@example.es',
-      password: await usersDb.cifrado('1234567')
+      password: await usersDb.cifrado('1234567'),
+      codeUsed: true,
+      codeDate: null,
+      registerDate: new Date(),
     }
   ]);
 }

@@ -6,6 +6,10 @@ const userSchema = mongoose.Schema({
     userName: { type: String, unique: true, index: true },
     email: { type: String, unique: true, index: true },
     password: String,
+    resetPassCode: Number,
+    codeUsed: Boolean,
+    codeDate: Date,
+    registerDate: Date,
 });
 
 const bcrypt = require('bcrypt');
