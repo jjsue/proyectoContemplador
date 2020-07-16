@@ -26,7 +26,7 @@ async function initUsersDb() {
   await usersDb.insertMany([
     {
       userName: 'contemplador',
-      email: 'user@example.es',
+      email: 'jjsue_95@hotmail.es',
       password: await usersDb.cifrado('1234'),
       codeUsed: true,
       codeDate: null,
