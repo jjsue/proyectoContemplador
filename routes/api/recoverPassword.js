@@ -8,13 +8,6 @@ const transport = require('./../../lib/mailServiceTransport');
 
 router.post('/', async (req, res, next) => {
     try {
-        // transport.verify(function (error, success) {
-        //     if (error) {
-        //         console.log(error);
-        //     } else {
-        //         console.log("Server is ready to take our messages");
-        //     }
-        // });
         const correo = req.body.mail;
         const resetCode = Math.round(Math.random() * 999999);
         const userFound = await User.findOneAndUpdate({ email: correo }, { resetPassCode: resetCode, codeUsed: false, codeDate: new Date() });
@@ -27,7 +20,6 @@ router.post('/', async (req, res, next) => {
                 Este codigo tiene un tiempo de expiración de diez minutos`,
             }
             transport.sendMail(message, (err, info) => {
-                console.log(err);
                 if (err === null) {
                     return res.json({ result: "Correo enviado" });
                 }
@@ -49,8 +41,6 @@ router.put('/', async (req, res, next) => {
         const code = req.body.code;
         const userFound = await User.findOne({ email: correo });
         const newPassword = req.body.password;
-        console.log(userFound.resetPassCode);
-        console.log(code);
         if (userFound !== null) {
             if ((new Date() - userFound.codeDate) / 1000 / 60 < 10) {
                 if (!userFound.codeUsed) {

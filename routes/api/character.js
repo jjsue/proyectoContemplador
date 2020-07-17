@@ -58,19 +58,19 @@ router.post('/', async (req, res, next) => {
                 var toReturn = JSON.parse(JSON.stringify(pnjFound));
                 delete toReturn.creatorId;
                 delete toReturn.isPublic;
-                res.send(toReturn);
+                return res.send(toReturn);
             } else if (req.cookies.authToken !== undefined) {
                 let userId = jwt.verify(req.cookies.authToken, process.env.JWT_PASS);
                 if (userId._id === pnjFound.creatorId) {
                     var toReturn = JSON.parse(JSON.stringify(pnjFound));
                     delete toReturn.creatorId;
                     delete toReturn.isPublic;
-                    res.send(toReturn);
+                    return res.send(toReturn);
                 } else {
-                    res.status(401).json({ result: "No tienes permiso para ver este personaje" });
+                    return res.status(401).json({ result: "No tienes permiso para ver este personaje" });
                 }
             } else {
-                res.status(401).json({ result: "No tienes permiso para ver este personaje" });
+                return res.status(401).json({ result: "No tienes permiso para ver este personaje" });
             }
         } else if (req.cookies.authToken !== undefined) { //Si no enviamos id especifico nos devuelve una lista de nuestros propios personajes
             let userId = jwt.verify(req.cookies.authToken, process.env.JWT_PASS);
@@ -87,9 +87,9 @@ router.post('/', async (req, res, next) => {
                 characterArray: listOfOwn,
                 user: userName.userName,
             }
-            res.send(response);
+            return res.send(response);
         } else {
-            res.status(401).json({ result: "No tienes permiso para ver esto" });
+            return res.status(401).json({ result: "No tienes permiso para ver esto" });
         }
     }
     catch (err) {
