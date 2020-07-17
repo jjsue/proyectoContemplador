@@ -28,11 +28,11 @@ router.post('/', async (req, res, next) => {
             }
             transport.sendMail(message, (err, info) => {
                 console.log(err);
-                if (err === null){
+                if (err === null) {
                     return res.json({ result: "Correo enviado" });
                 }
-                else{
-                    return res.status(500).json({ result: "Error en el envio de correo" }); 
+                else {
+                    return res.status(500).json({ result: "Error en el envio de correo" });
                 }
             });
         } else {

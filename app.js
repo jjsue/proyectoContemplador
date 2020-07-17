@@ -14,6 +14,7 @@ var saveCharacter = require('./routes/api/saveCharacter');
 var makePublic = require('./routes/api/makepublic');
 var logout = require('./routes/api/logout');
 var recoverPassword = require('./routes/api/recoverPassword');
+var deleteUser = require('./routes/api/deleteUser');
 require('./lib/connectDatabase');
 
 const cors = require('cors');
@@ -43,6 +44,7 @@ app.use('/api/savecharacter', saveCharacter);
 app.use('/api/makepublic', makePublic);
 app.use('/api/logout', logout);
 app.use('/api/recover', recoverPassword);
+app.use('/api/deleteuser', deleteUser)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
