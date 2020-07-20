@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var apiLogin = require('./routes/api/login');
 var apiRegister = require('./routes/api/register');
 var characterGenerator = require('./routes/api/characterGenerator');
@@ -35,7 +34,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/api/login', apiLogin);
 app.use('/api/register', apiRegister);
 app.use('/api/charactergenerator', characterGenerator);

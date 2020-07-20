@@ -21,7 +21,6 @@ router.post('/', async (req, res, next) => {
                 httpOnly: true,
                 //secure: true,
             });
-            console.log(userFound.userName);
             res.cookie('userName', userFound.userName, {
                 maxAge: 1000 * 60 * 60 * 60 * 24 * 15,
                 httpOnly: false,

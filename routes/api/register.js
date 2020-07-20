@@ -25,7 +25,6 @@ router.post('/',
             }
         }
         catch (err) {
-            console.log(err.code);
             if (err.code === 11000) {
                 if (err.keyValue.userName !== undefined) {
                     res.status(403).json({ error: 'Username already exists' });
