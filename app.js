@@ -21,7 +21,7 @@ var app = express();
 //CORS:
 app.use(cors({
   credentials: true,
-  origin: 'http://localhost:3001',
+  origin: process.env.CORSENV,
 }));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -43,6 +43,7 @@ app.use('/api/makepublic', makePublic);
 app.use('/api/logout', logout);
 app.use('/api/recover', recoverPassword);
 app.use('/api/deleteuser', deleteUser)
+app.use('*', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
