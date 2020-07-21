@@ -19,12 +19,14 @@ router.post('/', async (req, res, next) => {
             res.cookie('authToken', tokenCreated, {
                 maxAge: 1000 * 60 * 60 * 60 * 24 * 15,
                 httpOnly: true,
-                //secure: true,
+                secure: true,
+                sameSite: true,
             });
             res.cookie('userName', userFound.userName, {
                 maxAge: 1000 * 60 * 60 * 60 * 24 * 15,
                 httpOnly: false,
-                //secure: true,
+                secure: true,
+                sameSite: true,
             });
             res.json({
                 authToken: tokenCreated,

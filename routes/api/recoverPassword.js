@@ -11,6 +11,13 @@ router.post('/', async (req, res, next) => {
         const correo = req.body.mail;
         const resetCode = Math.round(Math.random() * 999999);
         const userFound = await User.findOneAndUpdate({ email: correo }, { resetPassCode: resetCode, codeUsed: false, codeDate: new Date() });
+        transport.verify(function(error, success) {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("Server is ready to take our messages");
+            }
+          });
         if (userFound !== null) {
             let message = {
                 from: "equipopassword@proyectocontemplador.es",
