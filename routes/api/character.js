@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const Pnj = require('./../../models/pnj');
 const User = require('./../../models/user');
 const { query } = require('express');
-const { check, validationResult } = require('express-validator');
 
 router.get('/', async (req, res, next) => {
     try {
@@ -47,16 +46,8 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.post('/',
-    [
-        check('id').isMongoId(),
-    ],
-    async (req, res, next) => {
+router.post('/', async (req, res, next) => {
         try {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                return res.status(422).json({ errors: errors.array() });
-            }
             if (req.body.id !== undefined) { //Si enviamos un id de personaje devolvemos un solo personaje
                 const pnjId = req.body.id;
                 const pnjFound = await Pnj.findById(pnjId, (err, pnj) => {
