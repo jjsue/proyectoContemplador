@@ -33,7 +33,7 @@ router.delete('/',
                 idArray.push(JSON.parse(JSON.stringify(userFoundByMail._id)));
                 idArray.push(JSON.parse(JSON.stringify(userFoundByUserName._id)));
                 if (idArray[0] === idArray[1] && idArray[0] === idArray[2]) {
-                    if (!await bcrypt.compare(password, userFoundById.password)) {
+                    if (await bcrypt.compare(password, userFoundById.password)) {
                         const deleteUser = await User.findByIdAndDelete(idArray[0]);
                         const deletedPnj = await Pnj.deleteMany({ creatorId: idArray[0] });
                         return res.status(204).json({ result: "Usuario borrado" });

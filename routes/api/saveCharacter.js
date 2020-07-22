@@ -193,6 +193,14 @@ router.post('/', [
             return res.status(422).json({ errors: errors.array() });
         } else {
             let userId = jwt.verify(req.cookies.authToken, process.env.JWT_PASS);
+            const todosPersonajes = await Pnj.find({ creatorId: userId._id });
+            for (let i = 0; i < todosPersonajes.length; i++) {
+                if (todosPersonajes[i].name === req.body.name) {
+                    return res.status(422).json({ result: "Ya tienes un personaje con ese nombre" });
+                } else {
+                    continue;
+                }
+            }
             const dataToSave = req.body;
             dataToSave.creatorId = userId._id;
             dataToSave.isPublic = false;
