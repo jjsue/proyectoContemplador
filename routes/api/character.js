@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const Pnj = require('./../../models/pnj');
 const User = require('./../../models/user');
 const { query } = require('express');
+const { check, validationResult } = require('express-validator');
+
 router.get('/', async (req, res, next) => {
     try {
         const filtro = {};
@@ -45,56 +47,64 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.post('/', async (req, res, next) => {
-    try {
-        if (req.body.id !== undefined) { //Si enviamos un id de personaje devolvemos un solo personaje
-            const pnjId = req.body.id;
-            const pnjFound = await Pnj.findById(pnjId, (err, pnj) => {
-                if (err) {
-                    return next(err);
-                }
-            });
-            if (pnjFound.isPublic) {
-                var toReturn = JSON.parse(JSON.stringify(pnjFound));
-                delete toReturn.creatorId;
-                delete toReturn.isPublic;
-                return res.send(toReturn);
-            } else if (req.cookies.authToken !== undefined) {
-                let userId = jwt.verify(req.cookies.authToken, process.env.JWT_PASS);
-                if (userId._id === pnjFound.creatorId) {
+router.post('/',
+    [
+        check('id').isMongoId(),
+    ],
+    async (req, res, next) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(422).json({ errors: errors.array() });
+            }
+            if (req.body.id !== undefined) { //Si enviamos un id de personaje devolvemos un solo personaje
+                const pnjId = req.body.id;
+                const pnjFound = await Pnj.findById(pnjId, (err, pnj) => {
+                    if (err) {
+                        return next(err);
+                    }
+                });
+                if (pnjFound.isPublic) {
                     var toReturn = JSON.parse(JSON.stringify(pnjFound));
                     delete toReturn.creatorId;
                     delete toReturn.isPublic;
                     return res.send(toReturn);
+                } else if (req.cookies.authToken !== undefined) {
+                    let userId = jwt.verify(req.cookies.authToken, process.env.JWT_PASS);
+                    if (userId._id === pnjFound.creatorId) {
+                        var toReturn = JSON.parse(JSON.stringify(pnjFound));
+                        delete toReturn.creatorId;
+                        delete toReturn.isPublic;
+                        return res.send(toReturn);
+                    } else {
+                        return res.status(401).json({ result: "No tienes permiso para ver este personaje" });
+                    }
                 } else {
                     return res.status(401).json({ result: "No tienes permiso para ver este personaje" });
                 }
+            } else if (req.cookies.authToken !== undefined) { //Si no enviamos id especifico nos devuelve una lista de nuestros propios personajes
+                let userId = jwt.verify(req.cookies.authToken, process.env.JWT_PASS);
+                const filtro = {};
+                let orderBy = - 1
+                var sort = { creationDate: orderBy };
+                var skip = 0;
+                var limit = 1000;
+                const fields = 'name clase nivel raza';
+                filtro.creatorId = userId._id;
+                const listOfOwn = await Pnj.lista(filtro, sort, skip, limit, fields);
+                const userName = await User.findById(userId._id);
+                const response = {
+                    characterArray: listOfOwn,
+                    user: userName.userName,
+                }
+                return res.send(response);
             } else {
-                return res.status(401).json({ result: "No tienes permiso para ver este personaje" });
+                return res.status(401).json({ result: "No tienes permiso para ver esto" });
             }
-        } else if (req.cookies.authToken !== undefined) { //Si no enviamos id especifico nos devuelve una lista de nuestros propios personajes
-            let userId = jwt.verify(req.cookies.authToken, process.env.JWT_PASS);
-            const filtro = {};
-            let orderBy = - 1
-            var sort = { creationDate: orderBy };
-            var skip = 0;
-            var limit = 1000;
-            const fields = 'name clase nivel raza';
-            filtro.creatorId = userId._id;
-            const listOfOwn = await Pnj.lista(filtro, sort, skip, limit, fields);
-            const userName = await User.findById(userId._id);
-            const response = {
-                characterArray: listOfOwn,
-                user: userName.userName,
-            }
-            return res.send(response);
-        } else {
-            return res.status(401).json({ result: "No tienes permiso para ver esto" });
         }
-    }
-    catch (err) {
-        next(err);
-    }
-});
+        catch (err) {
+            next(err);
+        }
+    });
 
 module.exports = router;

@@ -4,9 +4,19 @@ var router = express.Router();
 const User = require('./../../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { check, validationResult } = require('express-validator');
 
-router.post('/', async (req, res, next) => {
+router.post('/', 
+[
+    check('email').isEmail(),
+    check('password').isString(),
+],
+async (req, res, next) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ errors: errors.array() });
+        }
         const bodyMail = req.body.email;
         const password = req.body.password;
         const userFound = await User.findOne({ email: bodyMail });
