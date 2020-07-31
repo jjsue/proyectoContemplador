@@ -5,16 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var apiLogin = require('./routes/api/login');
-var apiRegister = require('./routes/api/register');
 var characterGenerator = require('./routes/api/characterGenerator');
-var character = require('./routes/api/character');
-var saveCharacter = require('./routes/api/saveCharacter');
-var makePublic = require('./routes/api/makepublic');
-var logout = require('./routes/api/logout');
-var recoverPassword = require('./routes/api/recoverPassword');
-var deleteUser = require('./routes/api/deleteUser');
-require('./lib/connectDatabase');
 
 const cors = require('cors');
 var app = express();
@@ -34,16 +25,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/api/login', apiLogin);
-app.use('/api/register', apiRegister);
-app.use('/api/charactergenerator', characterGenerator);
-app.use('/api/character', character);
-app.use('/api/savecharacter', saveCharacter);
-app.use('/api/makepublic', makePublic);
-app.use('/api/logout', logout);
-app.use('/api/recover', recoverPassword);
-app.use('/api/deleteuser', deleteUser)
-app.use('*', indexRouter);
+app.use('/api/dyd35/charactergenerator', characterGenerator);
+//app.use('*', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

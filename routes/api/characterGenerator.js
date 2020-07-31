@@ -13,11 +13,33 @@ const pgFn = require('../../lib/operaciones/pg');
 const alineamientoFn = require('../../lib/operaciones/alineamiento');
 const conjurosDiariosFn = require('./../../lib/operaciones/conjurosDiarios');
 const { check, validationResult } = require('express-validator');
+//Validaciones custom
+const checkLevelValue = (myLevel) => {return (myLevel % 1 !== 0 || myLevel < 1 || myLevel > 20) ? false : true};
+const checkClassValue = (myClass) => {return (!(myClass in clases)) ? false : true};
+const checkRaceValue = (myRace) => {return (!(myRace in tablaRazas)) ? false : true};
 router.post('/',
     [
-        check('level').isNumeric(),
-        check('class').isString(),
-        check('race').isString(),
+        check('level').isNumeric().custom((value) => {
+            if (checkLevelValue(value)) {
+                return true;
+            } else {
+                return false;
+            }
+        }),
+        check('class').isString().custom((value) => {
+            if (checkClassValue(value)) {
+                return true;
+            } else {
+                return false;
+            }
+        }),
+        check('race').isString().custom((value) => {
+            if (checkRaceValue(value)) {
+                return true;
+            } else {
+                return false;
+            }
+        }),
         check('dices').isString(),
     ],
     async (req, res, next) => {
@@ -28,17 +50,8 @@ router.post('/',
             }
             let createdCharacter = {};
             const clase = req.body.class;
-            if (!(clase in clases)) {
-                return res.status(400).json({ error: 'Esa clase no la tenemos' });
-            }
             const nivel = parseInt(req.body.level);
-            if (nivel > 20 || nivel < 1 || isNaN(nivel)) { //Comprobacion de nivel
-                return res.status(400).json({ error: 'Has introducido mal el rango de nivel' });
-            }
             const raza = req.body.race;
-            if (!(raza in tablaRazas)) {
-                return res.status(400).json({ error: 'La raza elegida no es una de las posibles actualmente' });
-            }
             const razaT = tablaRazas[raza];
             const dices = req.body.dices;
             //Tomamos la tabla del nivel del personaje
