@@ -88,8 +88,7 @@ router.post('/',
             createdCharacter.alineamiento = alineamientoFn(characterVarios.alineamiento);
 
             //Conjuros
-            createdCharacter.conjuros = 'caracteristicaConjuros' in characterVarios ? conjurosDiariosFn(createdCharacter.caracteristicas[characterVarios.caracteristicaConjuros][0], characterTable.conjuros) : null;
-
+            createdCharacter.conjuros = 'caracteristicaConjuros' in characterVarios ? conjurosDiariosFn(createdCharacter.caracteristicas[characterVarios.caracteristicaConjuros][0], JSON.parse(JSON.stringify(characterTable.conjuros))) : null;
             //Respuesta
             res.json({ createdCharacter });
 
