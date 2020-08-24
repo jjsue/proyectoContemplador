@@ -1,17 +1,17 @@
 'use strict'
 var express = require('express');
 var router = express.Router();
-const habilidades = require('./../../lib/tablas/skills');
-const clases = require('./../../lib/tablas/characterBase');
-const tablaRazas = require('./../../lib/tablas/razas');
-const caracteristicasFn = require('./../../lib/operaciones/caracteristicas');
-const marcarClasea = require('./../../lib/operaciones/marcarClasea');
-const asignarRangos = require('./../../lib/operaciones/asignarRangos');
-const equipamientoFn = require('./../../lib/operaciones/equipamiento');
-const derivadasFn = require('./../../lib/operaciones/derivadas');
-const pgFn = require('../../lib/operaciones/pg');
-const alineamientoFn = require('../../lib/operaciones/alineamiento');
-const conjurosDiariosFn = require('./../../lib/operaciones/conjurosDiarios');
+const habilidades = require('./../../../lib/dnd35/tablas/skills');
+const clases = require('./../../../lib/dnd35/tablas/characterBase');
+const tablaRazas = require('./../../../lib/dnd35/tablas/razas');
+const caracteristicasFn = require('./../../../lib/dnd35/operaciones/caracteristicas');
+const marcarClasea = require('./../../../lib/dnd35/operaciones/marcarClasea');
+const asignarRangos = require('./../../../lib/dnd35/operaciones/asignarRangos');
+const equipamientoFn = require('./../../../lib/dnd35/operaciones/equipamiento');
+const derivadasFn = require('./../../../lib/dnd35/operaciones/derivadas');
+const pgFn = require('../../../lib/dnd35/operaciones/pg');
+const alineamientoFn = require('../../../lib/dnd35/operaciones/alineamiento');
+const conjurosDiariosFn = require('./../../../lib/dnd35/operaciones/conjurosDiarios');
 const { check, validationResult } = require('express-validator');
 //Validaciones custom
 const checkLevelValue = (myLevel) => {return (myLevel % 1 !== 0 || myLevel < 1 || myLevel > 20) ? false : true};

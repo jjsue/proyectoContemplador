@@ -6,7 +6,8 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var reactRouter = require('./routes/react');
-var characterGenerator = require('./routes/api/characterGenerator');
+var characterGenerator35 = require('./routes/api/dnd35/characterGenerator');
+var trapGenerator35 = require('./routes/api/dnd35/trapGenerator');
 
 const cors = require('cors');
 var app = express();
@@ -27,7 +28,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/api/dyd35/charactergenerator', characterGenerator);
+app.use('/api/dyd35/charactergenerator', characterGenerator35);
+app.use('/api/dyd35/trap', trapGenerator35);
 app.use('/app*', reactRouter);
 
 // catch 404 and forward to error handler
