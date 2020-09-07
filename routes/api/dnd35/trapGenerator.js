@@ -6,6 +6,7 @@ const { check, validationResult } = require('express-validator');
 router.post('/',
     async (req, res, next) => {
         try {
+            //Por ahora van a ser trampas mecánicas, ya que las trampas mágicas requeririan de conjuros.
             res.send("Hi");
 
         }
