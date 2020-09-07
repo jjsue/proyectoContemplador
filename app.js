@@ -14,8 +14,7 @@ var app = express();
 //CORS:
 app.use(cors({
   credentials: true,
-  //origin: process.env.CORSENV,
-  origin: '*',
+  origin: process.env.CORSENV,
 }));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
