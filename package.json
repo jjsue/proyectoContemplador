@@ -5,8 +5,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/www",
     "dev": "cross-env PORT=3000 NODE_ENV=development nodemon",
-    "devbug": "cross-env PORT=3000 DEBUG=nodepop:* NODE_ENV=development nodemon",
-    "database": "node ./init-db.js"
+    "devbug": "cross-env PORT=3000 DEBUG=nodepop:* NODE_ENV=development nodemon"
   },
   "dependencies": {
     "chance": "^1.1.6",
