@@ -7,6 +7,7 @@ const trapRearme = require("./../../../lib/dnd35/operaciones/trapRearme");
 const trapDesactivacion = require("./../../../lib/dnd35/operaciones/trapDesactivacion");
 const trapEfecto = require("./../../../lib/dnd35/operaciones/trapEfecto");
 const trapDano = require("./../../../lib/dnd35/operaciones/trapDano");
+const trapDerivadas = require("./../../../lib/dnd35/operaciones/trapDerivadas");
 //Validaciones custom
 router.post('/',
     async (req, res, next) => {
@@ -17,8 +18,9 @@ router.post('/',
             newTrap.desactivacion = trapDesactivacion();
             newTrap.efecto = trapEfecto();
             newTrap.dano = trapDano(newTrap.efecto[0]);
+            const FinalTrap = trapDerivadas(newTrap, req.body.valorDesafio);
             //Respondemos
-            res.json(newTrap);
+            res.json(FinalTrap);
 
         }
         catch (err) {
